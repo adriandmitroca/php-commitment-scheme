@@ -4,8 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" value="{{ csrf_token() }}">
 
-    <title>Laravel Chat</title>
+    <title>PHP Commitment Scheme</title>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
     <link href="{{ asset(elixir('css/app.css')) }}" rel="stylesheet">
@@ -16,7 +17,7 @@
             <div class="navbar-header">
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel Chat
+                    PHP Commitment Scheme
                 </a>
             </div>
         </div>

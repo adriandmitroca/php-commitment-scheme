@@ -1,3 +1,9 @@
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 // Enable pusher logging - don't include this in production
 Pusher.log = function (message) {
     if (window.console && window.console.log) {
@@ -13,11 +19,43 @@ window.lock = false;
 
 var chat = pusher.subscribe('chat');
 
-chat.bind('App\\Events\\MessageWasSent', function (data) {
-    $('#messages').append($('<p><strong>' + data.message.author + '</strong> [' + data.message.created_at + ']: ' + data.message.content + '</p>').hide().fadeIn(500));
+chat.bind('App\\Events\\FirstCommitment', function (data) {
+    if (data.client_id !== window.client_id) {
+        var message = '<p><i>' +
+            'Received R1 and hash!' +
+            '<br>R1 = ' + data.r1 +
+            '<br>Hash = ' + data.hash +
+            '</i></p>';
 
-    if ($('#messages p').length > 10) {
-        $('#messages p:first-of-type').fadeOut(500).remove();
+        $('#messages').append($(message).hide().fadeIn(500));
+
+        $.post('commitment/first', data).done(function (data) {
+
+        }).fail(function (data) {
+            console.log('Something went wrong', data);
+        });
+    }
+});
+
+chat.bind('App\\Events\\SecondCommitment', function (data) {
+    if (data.client_id !== window.client_id) {
+        var message = '<p><i>' +
+            'Received message, R1 and R2!' +
+            '<br>R1 = ' + data.r1 +
+            '<br>R2 = ' + data.r2 +
+            '</i></p>';
+
+        $('#messages').append($(message).hide().fadeIn(500));
+
+        $.post('commitment/second', data).done(function (data) {
+            $('#messages').append($(data.response).hide().fadeIn(500));
+        }).fail(function (data) {
+            console.log('Something went wrong', data);
+        });
+    }
+
+    else if(data.client_id === window.client_id) {
+        $('#messages').append($('<p><i>Sent R1, R2 and message</i></p>').hide().fadeIn(500));
     }
 });
 
@@ -29,8 +67,16 @@ $('#sendMessage').submit(function (e) {
 
     if (window.lock === false) {
         window.lock = true;
-        $.post('chat/new', vm.serialize()).done(function () {
+        $.post('chat/new', vm.serialize()).done(function (data) {
             vm.find('textarea').val('');
+            var message = '<p>[' + data.created_at + ']: ' + data.content + '</p>' +
+                '<p><i>Using commitment scheme with...' +
+                '<br>R1: ' + data.r1 +
+                '<br>R2: ' + data.r2 +
+                '<br>Hash: ' + data.hash +
+                '<br>Message: ' + data.content + '</i></p>' +
+                '<p><i>Sent hashed message and R2</i></p>';
+            $('#messages').append($(message).hide().fadeIn(500));
             window.lock = false;
         }).fail(function (data) {
             window.lock = false;
@@ -41,6 +87,8 @@ $('#sendMessage').submit(function (e) {
             });
         });
     }
+
+    return false;
 });
 
 $('textarea').keypress(function (e) {

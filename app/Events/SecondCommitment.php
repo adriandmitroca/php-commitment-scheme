@@ -2,29 +2,35 @@
 
 namespace App\Events;
 
-use App\Events\Event;
 use App\Models\Message;
-use App\Models\User;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class MessageWasSent extends Event implements ShouldBroadcast
+class SecondCommitment extends Event implements ShouldBroadcast
 {
 
-    use SerializesModels;
+    public $id;
 
     public $message;
+
+    public $r1;
+
+    public $r2;
+
+    public $client_id;
 
 
     /**
      * Create a new event instance.
      *
      * @param Message $message
-     * @param User    $user
      */
     public function __construct(Message $message)
     {
-        $this->message = $message;
+        $this->id        = $message->id;
+        $this->r1        = $message->R1;
+        $this->r2        = $message->R2;
+        $this->message   = $message->content;
+        $this->client_id = $message->client_id;
     }
 
 

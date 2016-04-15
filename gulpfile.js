@@ -14,6 +14,9 @@ var elixir = require('laravel-elixir');
 elixir(function (mix) {
     mix.sass('app.scss');
     mix.scripts('app.js');
+    mix.browserSync({
+        'proxy': 'http://localhost/php-commitment-scheme'
+    });
 
     mix.version(['public/css/app.css', 'public/js/app.js']);
 });

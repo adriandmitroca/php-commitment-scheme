@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateMessagesTable extends Migration
 {
@@ -15,8 +15,11 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
-            $table->longText('content');
-            $table->string('author');
+            $table->text('R1');
+            $table->text('R2');
+            $table->text('content');
+            $table->text('hash');
+            $table->text('client_id');
             $table->timestamps();
         });
     }
