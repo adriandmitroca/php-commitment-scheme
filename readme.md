@@ -1,5 +1,5 @@
-# Super simple chat application in Laravel
+# PHP Commitment Scheme implementation
 
-This is an extremely simple chat application that uses goodness of [Pusher](https://pusher.com/). Everything works on Laravel's event system and it's built-in support for Pusher.
+Source: https://en.wikipedia.org/wiki/Commitment_scheme
 
-It can be also used with Redis just with one simple change - the driver (requires literally few clicks) if you want to use it on your own websocket server.
+It's based on [adriandmitroca/laravel-chat](https://github.com/adriandmitroca/laravel-chat) boilerplate which means chat functionality is working on top of Laravel 5.2 and Pusher.
